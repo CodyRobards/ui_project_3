@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +12,7 @@ class CalculatorApp extends StatefulWidget {
 }
 
 class _CalculatorAppState extends State<CalculatorApp> {
-  bool _isDarkMode = false;
+  bool _isDarkMode = true;
 
   void _toggleTheme() {
     setState(() {
@@ -43,7 +41,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
       colorScheme: colorScheme,
       brightness: colorScheme.brightness,
       scaffoldBackgroundColor:
-          dark ? const Color(0xFF0B0F1A) : const Color(0xFFF0F6FF),
+          dark ? const Color(0xFF0A111F) : const Color(0xFFE9F0FA),
       textTheme: textTheme,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -94,8 +92,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final gradientColors = widget.isDarkMode
-        ? const [Color(0xFF16222A), Color(0xFF3A6073)]
-        : const [Color(0xFFE0EAFC), Color(0xFFCFDEF3)];
+        ? const [Color(0xFF050912), Color(0xFF17213B)]
+        : const [Color(0xFFDDE6F5), Color(0xFFF4F7FD)];
+    final bool isDark = widget.isDarkMode;
+    final Color shellColor =
+        isDark ? const Color(0xFF111B2E) : const Color(0xFFF8FAFF);
+    final Color deepShadow =
+        isDark ? Colors.black.withOpacity(0.55) : const Color(0xFFB5C2D6);
+    final Color highlightShadow =
+        isDark ? const Color(0xFF1F2B40) : Colors.white;
 
     return Scaffold(
       body: Container(
@@ -109,71 +114,62 @@ class _CalculatorPageState extends State<CalculatorPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: SizedBox(
+            child: Container(
               width: 360,
               height: 620,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(32),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 32),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(32),
-                      border: Border.all(
-                        color: Colors.white
-                            .withOpacity(widget.isDarkMode ? 0.18 : 0.4),
-                        width: 1.2,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 24, vertical: 32),
+              decoration: BoxDecoration(
+                color: shellColor,
+                borderRadius: BorderRadius.circular(36),
+                boxShadow: [
+                  BoxShadow(
+                    color: deepShadow,
+                    offset: const Offset(24, 24),
+                    blurRadius: 46,
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: highlightShadow,
+                    offset: const Offset(-20, -20),
+                    blurRadius: 42,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.calculate_outlined, size: 28),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Snazzy Calculator',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      color: widget.isDarkMode
-                          ? Colors.white.withOpacity(0.05)
-                          : Colors.white.withOpacity(0.55),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black
-                              .withOpacity(widget.isDarkMode ? 0.25 : 0.1),
-                          blurRadius: 30,
-                          offset: const Offset(0, 20),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.calculate_outlined, size: 28),
-                            const SizedBox(width: 12),
-                            Text(
-                              'Snazzy Calculator',
-                              style: theme.textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const Spacer(),
-                            const SizedBox(width: 8),
-                            Switch(
-                              value: widget.isDarkMode,
-                              onChanged: (_) => widget.onToggleTheme(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 28),
-                        _DisplayPanel(
-                          history: _controller.history,
-                          value: _controller.display,
-                        ),
-                        const SizedBox(height: 18),
-                        Expanded(
-                          child: _ButtonsGrid(
-                            onButtonTap: _handleButtonPress,
-                          ),
-                        ),
-                      ],
+                      const Spacer(),
+                      const SizedBox(width: 8),
+                      Switch(
+                        value: widget.isDarkMode,
+                        onChanged: (_) => widget.onToggleTheme(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 28),
+                  _DisplayPanel(
+                    history: _controller.history,
+                    value: _controller.display,
+                  ),
+                  const SizedBox(height: 18),
+                  Expanded(
+                    child: _ButtonsGrid(
+                      onButtonTap: _handleButtonPress,
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -225,12 +221,30 @@ class _DisplayPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
+    final Color panelColor =
+        isDark ? const Color(0xFF0E1728) : theme.colorScheme.surface;
+    final Color shadowDark =
+        isDark ? Colors.black.withOpacity(0.5) : const Color(0xFFCCD5E0);
+    final Color shadowLight =
+        isDark ? const Color(0xFF1E2B42) : Colors.white;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        color: theme.colorScheme.surface.withOpacity(0.6),
-        border: Border.all(color: Colors.white.withOpacity(0.25)),
+        color: panelColor,
+        boxShadow: [
+          BoxShadow(
+            color: shadowDark,
+            blurRadius: 20,
+            offset: const Offset(10, 10),
+          ),
+          BoxShadow(
+            color: shadowLight,
+            blurRadius: 20,
+            offset: const Offset(-10, -10),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -295,10 +309,10 @@ class _ButtonsGrid extends StatelessWidget {
                 background = scheme.primary;
                 foreground = scheme.onPrimary;
               } else if (isUtility) {
-                background = scheme.secondaryContainer.withOpacity(0.6);
+                background = scheme.secondaryContainer;
                 foreground = scheme.onSecondaryContainer;
               } else {
-                background = scheme.surfaceVariant.withOpacity(0.7);
+                background = scheme.surfaceVariant;
                 foreground = scheme.onSurface;
               }
 
@@ -336,31 +350,49 @@ class _CalculatorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: background,
-          border: Border.all(color: Colors.white.withOpacity(0.18)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.12),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+    final theme = Theme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
+    final List<BoxShadow> shadows = [
+      BoxShadow(
+        color: isDark ? Colors.black.withOpacity(0.55) : const Color(0xFFB7C6D6),
+        offset: const Offset(6, 6),
+        blurRadius: 14,
+      ),
+      BoxShadow(
+        color: isDark ? const Color(0xFF1F2B40) : Colors.white,
+        offset: const Offset(-6, -6),
+        blurRadius: 14,
+      ),
+    ];
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        splashColor: foreground.withOpacity(0.25),
+        highlightColor: foreground.withOpacity(0.12),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: background,
+            boxShadow: shadows,
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: theme.textTheme.titleLarge?.copyWith(
+                        color: foreground,
+                        fontWeight: FontWeight.w700,
+                      ) ??
+                  TextStyle(
                     color: foreground,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
-                  ) ??
-              TextStyle(
-                  color: foreground, fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
+            ),
+          ),
         ),
       ),
     );
