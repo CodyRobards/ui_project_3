@@ -363,20 +363,6 @@ class _CalculatorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bool isDark = theme.brightness == Brightness.dark;
-    final List<BoxShadow> shadows = [
-      BoxShadow(
-        color: isDark ? Colors.black.withOpacity(0.55) : const Color(0xFFB7C6D6),
-        offset: const Offset(6, 6),
-        blurRadius: 14,
-      ),
-      BoxShadow(
-        color: isDark ? const Color(0xFF1F2B40) : Colors.white,
-        offset: const Offset(-6, -6),
-        blurRadius: 14,
-      ),
-    ];
-
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(20),
@@ -389,7 +375,6 @@ class _CalculatorButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: background,
-            boxShadow: shadows,
           ),
           child: Center(
             child: Text(
