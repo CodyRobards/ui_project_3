@@ -29,13 +29,14 @@ class _CalculatorAppState extends State<CalculatorApp> {
       brightness: dark ? Brightness.dark : Brightness.light,
     );
 
-    final textTheme = ThemeData(brightness: dark ? Brightness.dark : Brightness.light)
-        .textTheme
-        .apply(
-          fontFamily: 'RobotoMono',
-          displayColor: colorScheme.onSurface,
-          bodyColor: colorScheme.onSurface,
-        );
+    final textTheme =
+        ThemeData(brightness: dark ? Brightness.dark : Brightness.light)
+            .textTheme
+            .apply(
+              fontFamily: 'RobotoMono',
+              displayColor: colorScheme.onSurface,
+              bodyColor: colorScheme.onSurface,
+            );
 
     return ThemeData(
       useMaterial3: true,
@@ -49,7 +50,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
           backgroundColor: colorScheme.primary.withOpacity(dark ? 0.6 : 0.85),
           foregroundColor: colorScheme.onPrimary,
           textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         ),
       ),
     );
@@ -107,63 +109,69 @@ class _CalculatorPageState extends State<CalculatorPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(32),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(widget.isDarkMode ? 0.18 : 0.4),
-                      width: 1.2,
-                    ),
-                    color: widget.isDarkMode
-                        ? Colors.white.withOpacity(0.05)
-                        : Colors.white.withOpacity(0.55),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(widget.isDarkMode ? 0.25 : 0.1),
-                        blurRadius: 30,
-                        offset: const Offset(0, 20),
+            child: SizedBox(
+              width: 360,
+              height: 620,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 32),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(32),
+                      border: Border.all(
+                        color: Colors.white
+                            .withOpacity(widget.isDarkMode ? 0.18 : 0.4),
+                        width: 1.2,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.calculate_outlined, size: 28),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Snazzy Calculator',
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(widget.isDarkMode ? 'Dark' : 'Light'),
-                          const SizedBox(width: 8),
-                          Switch(
-                            value: widget.isDarkMode,
-                            onChanged: (_) => widget.onToggleTheme(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 28),
-                      _DisplayPanel(
-                        history: _controller.history,
-                        value: _controller.display,
-                      ),
-                      const SizedBox(height: 18),
-                      Expanded(
-                        child: _ButtonsGrid(
-                          onButtonTap: _handleButtonPress,
+                      color: widget.isDarkMode
+                          ? Colors.white.withOpacity(0.05)
+                          : Colors.white.withOpacity(0.55),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black
+                              .withOpacity(widget.isDarkMode ? 0.25 : 0.1),
+                          blurRadius: 30,
+                          offset: const Offset(0, 20),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.calculate_outlined, size: 28),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Snazzy Calculator',
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const Spacer(),
+                            const SizedBox(width: 8),
+                            Switch(
+                              value: widget.isDarkMode,
+                              onChanged: (_) => widget.onToggleTheme(),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 28),
+                        _DisplayPanel(
+                          history: _controller.history,
+                          value: _controller.display,
+                        ),
+                        const SizedBox(height: 18),
+                        Expanded(
+                          child: _ButtonsGrid(
+                            onButtonTap: _handleButtonPress,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -276,7 +284,8 @@ class _ButtonsGrid extends StatelessWidget {
                 return const Expanded(child: SizedBox.shrink());
               }
 
-              final bool isOperation = ['÷', '×', '−', '+', '='].contains(label);
+              final bool isOperation =
+                  ['÷', '×', '−', '+', '='].contains(label);
               final bool isUtility = ['C', 'DEL', 'Mode'].contains(label);
               final ColorScheme scheme = theme.colorScheme;
               Color background;
@@ -347,10 +356,11 @@ class _CalculatorButton extends StatelessWidget {
         child: Text(
           label,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: foreground,
-                fontWeight: FontWeight.w700,
-              ) ??
-              TextStyle(color: foreground, fontSize: 20, fontWeight: FontWeight.w700),
+                    color: foreground,
+                    fontWeight: FontWeight.w700,
+                  ) ??
+              TextStyle(
+                  color: foreground, fontSize: 20, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -424,13 +434,15 @@ class CalculatorController {
       return;
     }
 
-    final result = _performOperation(_firstOperand!, secondOperand, _pendingOperation!);
+    final result =
+        _performOperation(_firstOperand!, secondOperand, _pendingOperation!);
 
     if (result == null) {
       _display = 'Error';
       _history = '';
     } else {
-      _history = '${_formatNumber(_firstOperand!)} ${_pendingOperation!} ${_formatNumber(secondOperand)} =';
+      _history =
+          '${_formatNumber(_firstOperand!)} ${_pendingOperation!} ${_formatNumber(secondOperand)} =';
       _display = _formatNumber(result);
     }
 
@@ -468,7 +480,8 @@ class CalculatorController {
   }
 
   void _compute(double secondOperand) {
-    final result = _performOperation(_firstOperand!, secondOperand, _pendingOperation!);
+    final result =
+        _performOperation(_firstOperand!, secondOperand, _pendingOperation!);
     if (result == null) {
       _display = 'Error';
       _history = '';
