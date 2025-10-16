@@ -165,8 +165,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   ),
                   const SizedBox(height: 18),
                   Expanded(
-                    child: _ButtonsGrid(
-                      onButtonTap: _handleButtonPress,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      clipBehavior: Clip.antiAlias,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: shellColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: _ButtonsGrid(
+                            onButtonTap: _handleButtonPress,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
